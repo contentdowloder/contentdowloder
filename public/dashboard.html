@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>IG Downloader - Dashboard</title>
+</head>
+<body>
+  <h2>Download Instagram Media</h2>
+  <input id="url" placeholder="Paste Instagram URL" style="width:300px"><br>
+  <button onclick="fetchMedia()">Fetch</button>
+  <div id="result"></div>
+
+  <script>
+    async function fetchMedia() {
+      const url = document.getElementById('url').value;
+      const token = localStorage.getItem('token');
+      const res = await fetch('/api/fetch', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({ url })
+      });
+      const data = await res.json();
+      if (data.url) {
+        document.getElementById('result').innerHTML = 
+          `<p>${data.title}</p><a href="${data.url}" target="_blank">Download Link</a>`;
+      } else {
+        document.getElementById('result').innerText = data.message;
+      }
+    }
+  </script>
+</body>
+</html>
